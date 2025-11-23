@@ -36,8 +36,11 @@ import java.time.temporal.TemporalAccessor;
  * implements long results. Astronomical calculations often require a Julian
  * Day able to handle the time of the day as well.
  * <p>
+ * Please notice that this implementation completely ignores the time zone.
+ * The user should ensure the use of the appropriate time frame.
+ * <p>
  * The Julian day is calculated according to Meeus' algorithm explained in
- * Chapter 7 of "Astronomical Algorithms", Second Edition.
+ * Chapter 7.
  */
 public class JulianDayHelper {
     // Math context for the required calculations.
@@ -60,6 +63,10 @@ public class JulianDayHelper {
      * We cannot rely on the presence of isBefore(), so we use the required
      * fields to check if the date is Julian.
      * 
+     * @param year year to be checked
+     * @param month month to be checked
+     * @param day day to be checked
+     * 
      * @return true if the date should be treated as Julian-based.
      */
     private static boolean isJulian(int year, int month, int day) {
@@ -81,9 +88,11 @@ public class JulianDayHelper {
      *   <li>DAY_OF_MONTH</li>
      *   <li>NANO_OF_DAY</li>
      * </ul>
-     *
-     * @see java.time.temporal.TemporalField for more information on the
-     * specific fields.
+     * <p>
+     * Both {@link java.time.LocalDateTime} and {@link java.time.ZonedDateTime}
+     * satisfy these prerequisites.
+     * 
+     * @see java.time.temporal.TemporalField Information on specific fields.
      * 
      * @param temporal 
      */
@@ -105,6 +114,9 @@ public class JulianDayHelper {
      *   <li>DAY_OF_MONTH</li>
      *   <li>NANO_OF_DAY</li>
      * </ul>
+     * <p>
+     * Both {@link java.time.LocalDateTime} and {@link java.time.ZonedDateTime}
+     * satisfy these prerequisites.
      * 
      * @param temporal the temporal accessor
      * @return the Julian Day as a BigDecimal value
@@ -136,6 +148,9 @@ public class JulianDayHelper {
      *   <li>DAY_OF_MONTH</li>
      *   <li>NANO_OF_DAY</li>
      * </ul>
+     * <p>
+     * Both {@link java.time.LocalDateTime} and {@link java.time.ZonedDateTime}
+     * satisfy these prerequisites.
      * 
      * @param temporal the temporal accessor
      * @return the Julian Day as a value of type double
