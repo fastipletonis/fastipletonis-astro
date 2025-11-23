@@ -1,7 +1,9 @@
 # Workflow for basic library builds.
 name: CI
 on:
-  pull_request:
+  push:
+    branches:
+      - main
 jobs:
     # Build workflow.
     build:
@@ -14,5 +16,8 @@ jobs:
               with:
                   java-version: 25
                   distribution: temurin
-            - name: Build with Maven
-              run: mvn verify
+            - name: Build and publish to GitHub Packages
+              run: mvn deploy --settings .github/settings.xml -B --file pom.xml
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GITHUB_ACTOR: ${{ github.actor }}

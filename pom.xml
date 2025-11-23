@@ -123,4 +123,18 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <distributionManagement>
+    <repository>
+      <id>github-release</id>
+      <name>Release packages for fastipletonis-meeus</name>
+      <url>https://maven.pkg.github.com/fastipletonis/fastipletonis-meeus</url>
+    </repository>
+    <snapshotRepository>
+      <id>github-snapshot</id>
+      <name>Snapshot packages for fastipletonis-meeus</name>
+      <url>https://maven.pkg.github.com/fastipletonis/fastipletonis-meeus</url>
+    </snapshotRepository>
+  </distributionManagement>
+
 </project>
