@@ -31,15 +31,16 @@ public class DecimalTimeTest {
     @ParameterizedTest
     @CsvSource(useHeadersInDisplayName = true, textBlock ="""
         EXPECTED,   INPUT
-        0,          00:00:00    
+        0.0,        00:00:00    
         0.5,        12:00:00
         0.81,       19:26:24
     """)
     void testAsBigDecimal(String decimalTime, String time) {
         final BigDecimal expected = new BigDecimal(decimalTime);
+        final int expScale = expected.scale();
         final LocalTime input = LocalTime.parse(time);
         final BigDecimal actual = DecimalTime.asBigDecimal(input);
-        assertEquals(expected, actual);
+        assertEquals(expected, actual.setScale(expScale));
     }
     @ParameterizedTest
     @CsvSource(useHeadersInDisplayName = true, textBlock ="""
@@ -70,7 +71,7 @@ public class DecimalTimeTest {
     @ParameterizedTest
     @CsvSource(useHeadersInDisplayName = true, textBlock ="""
         EXPECTED,   INPUT
-        00:00:00,   0
+        00:00:00,   0.0
         19:26:24,   0.81
         12:00:00,   0.5
     """)
@@ -86,7 +87,7 @@ public class DecimalTimeTest {
         EXPECTED,               INPUT
          1957-10-04T19:26:24,   1957-10-04.81
          0333-01-27T12:00:00,   333-1-27.5
-        -0123-12-31T00:00:00,   -123-12-31.0
+        -0123-12-31T00:00:00,   '-123-12-31,0'
     """)
     void testParseDateTime(String e, String input) {
         final LocalDateTime expected = LocalDateTime.parse(e);

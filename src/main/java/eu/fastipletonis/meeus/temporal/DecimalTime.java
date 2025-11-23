@@ -48,7 +48,7 @@ public class DecimalTime {
     private static final BigDecimal NANOS_PER_DAY_BD = BigDecimal.valueOf(NANOS_PER_DAY_L);
     private static final double NANOS_PER_DAY_D = NANOS_PER_DAY_BD.doubleValue();
     // Regular expression for checking input
-    private static final Pattern FMT_DECIMAL_DATETIME = Pattern.compile("([+\\-]?[0-9]{1,4})-([01]?[0-9])-([0-3]?[0-9])(\\.[0-9]+)");
+    private static final Pattern FMT_DECIMAL_DATETIME = Pattern.compile("([+\\-]?[0-9]{1,4})-([01]?[0-9])-([0-3]?[0-9])[.,]([0-9]+)");
     /**
      * Returns a decimal time from a temporal accessor object as a double
      * value.
@@ -125,7 +125,7 @@ public class DecimalTime {
             final int year = Integer.parseInt(m.group(1));
             final int month = Integer.parseInt(m.group(2));
             final int day = Integer.parseInt(m.group(3));
-            final double time = Double.parseDouble(m.group(4));
+            final double time = Double.parseDouble("0." + m.group(4));
             final LocalDate localDate = LocalDate.of(year, month, day);
             final LocalTime localTime = toLocalTime(time);
             return LocalDateTime.of(localDate, localTime);
