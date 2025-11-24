@@ -119,7 +119,9 @@ public class DecimalTime {
      * It is possible to use negative years. Please note that the
      * floating-point part is mandatory, so for example to indicate the
      * midnight of November 1<sup>st</sup>, 2000, the correct format would
-     * be: <code>2000-11-01.0</code>, or even <code>2000-11-1.0</code>. 
+     * be: <code>2000-11-01.0</code>, or even <code>2000-11-1.0</code>.
+     * <p>
+     * Both "." and "," are accepted as separators.
      * 
      * @param text the string to parse.
      * 
