@@ -18,6 +18,8 @@
  */
 package eu.fastipletonis.astro.temporal;
 
+import static java.time.temporal.ChronoField.NANO_OF_DAY;
+
 import java.math.BigDecimal;
 import java.time.temporal.TemporalQuery;
 
@@ -54,6 +56,26 @@ public class Queries {
     public static final TemporalQuery<BigDecimal> HP_JULIAN_DAY = (temporal) -> {
         if (JulianDayHelper.isSupported(temporal)) {
             return JulianDayHelper.getBigDecimalFrom(temporal);
+        } else return null;
+    };
+
+    /**
+     * Query for returning the decimal time as a double. Returns null if the
+     * temporal object does not support the field {@link #NANO_OF_DAY}.
+     */
+    public static final TemporalQuery<Double> DECIMAL_TIME = (temporal) -> {
+        if (temporal.isSupported(NANO_OF_DAY)) {
+            return DecimalTime.asDouble(temporal);
+        } else return null;
+    };
+
+    /**
+     * Query for returning the decimal time as a BigDecimal. Returns null if
+     * the temporal object does not support the field {@link #NANO_OF_DAY}.
+     */
+    public static final TemporalQuery<BigDecimal> HP_DECIMAL_TIME = (temporal) -> {
+        if (temporal.isSupported(NANO_OF_DAY)) {
+            return DecimalTime.asBigDecimal(temporal);
         } else return null;
     };
 }
