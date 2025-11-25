@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"eu.fastipletonis.astro.temporal","l":"DecimalTimeTest"},{"p":"eu.fastipletonis.astro.temporal","l":"JulianDayHelperTest"}];updateSearchResults();
