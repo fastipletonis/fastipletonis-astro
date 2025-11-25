@@ -35,9 +35,9 @@ jobs:
                   java-version: 25
                   distribution: temurin
             - name: Update the website
-              run: mvn clean site -B
+              run: mvn clean site site:stage -B
             - name: GitHub Pages action
               uses: peaceiris/actions-gh-pages@v4.0.0
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
-                publish_dir: ./fastipletonis-astro/target/site
+                publish_dir: ./target/staging
