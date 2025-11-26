@@ -36,15 +36,13 @@ public class RightAscension {
     // Math context
     private static final MathContext MC = new MathContext(20, RoundingMode.HALF_UP);
     // Conversion factor between decimal hours and nanoseconds
-    private static final double D_NANOS_PER_HOUR = 3.6e12d;
-    private static final double D_HOUR_CONV = D_NANOS_PER_HOUR / 15.0d;
+    private static final double D_HOUR_CONV = 24.0e10d;
     // BigDecimal numeric constants.
     private static final BigDecimal NANO = BigDecimal.valueOf(1.0e-9d);
     private static final BigDecimal C60 = BigDecimal.valueOf(60);
     private static final BigDecimal C3600 = BigDecimal.valueOf(3600);
     private static final BigDecimal C15 = BigDecimal.valueOf(15);
-    private static final BigDecimal BD_NANOS_PER_HOUR = BigDecimal.valueOf(D_NANOS_PER_HOUR);
-    private static final BigDecimal BD_HOUR_CONV = BD_NANOS_PER_HOUR.divide(C15, MC);
+    private static final BigDecimal BD_HOUR_CONV = BigDecimal.valueOf(24, -10);
 
     // Private constructor.
     private RightAscension() {
