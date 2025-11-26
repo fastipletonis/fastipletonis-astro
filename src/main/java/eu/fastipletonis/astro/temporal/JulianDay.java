@@ -44,7 +44,7 @@ import java.time.temporal.TemporalAccessor;
  * The Julian day is calculated according to Meeus' algorithm explained in
  * Chapter 7.
  */
-public class JulianDayHelper {
+public class JulianDay {
     // Math context for the required calculations.
     private static final MathContext MC = new MathContext(30, RoundingMode.DOWN);
     // Constants related to the Julian calendar cut-off.
@@ -68,25 +68,32 @@ public class JulianDayHelper {
     private static final BigDecimal C2299161 = new BigDecimal(2299161);
     // Format for string conversion in DecimalTime.
     private static final String FMT_DEC_DATETIME = "%d-%d-%f";
+
     // Private constructor to prevent instantiation.
-    private JulianDayHelper() {}
+    private JulianDay() {
+    }
 
     /**
      * We cannot rely on the presence of isBefore(), so we use the required
      * fields to check if the date is Julian.
      * 
-     * @param year year to be checked
+     * @param year  year to be checked
      * @param month month to be checked
-     * @param day day to be checked
+     * @param day   day to be checked
      * 
      * @return true if the date should be treated as Julian-based.
      */
     private static boolean isJulian(int year, int month, int day) {
-        if (year < CUTOFF_YEAR) return true;
-        else if (year > CUTOFF_YEAR) return false;
-        else if (month < CUTOFF_MONTH) return true;
-        else if (month > CUTOFF_MONTH) return false;
-        else return day < CUTOFF_DAY;
+        if (year < CUTOFF_YEAR)
+            return true;
+        else if (year > CUTOFF_YEAR)
+            return false;
+        else if (month < CUTOFF_MONTH)
+            return true;
+        else if (month > CUTOFF_MONTH)
+            return false;
+        else
+            return day < CUTOFF_DAY;
     }
 
     /**
@@ -95,10 +102,10 @@ public class JulianDayHelper {
      * <p>
      * The following fields are checked:
      * <ul>
-     *   <li>{@link java.time.temporal.ChronoField#YEAR}</li>
-     *   <li>{@link java.time.temporal.ChronoField#MONTH_OF_YEAR}</li>
-     *   <li>{@link java.time.temporal.ChronoField#DAY_OF_MONTH}</li>
-     *   <li>{@link java.time.temporal.ChronoField#NANO_OF_DAY}</li>
+     * <li>{@link java.time.temporal.ChronoField#YEAR}</li>
+     * <li>{@link java.time.temporal.ChronoField#MONTH_OF_YEAR}</li>
+     * <li>{@link java.time.temporal.ChronoField#DAY_OF_MONTH}</li>
+     * <li>{@link java.time.temporal.ChronoField#NANO_OF_DAY}</li>
      * </ul>
      * <p>
      * Both {@link java.time.LocalDateTime} and {@link java.time.ZonedDateTime}
@@ -123,10 +130,10 @@ public class JulianDayHelper {
      * <p>
      * The temporal accessor must support the following fields:
      * <ul>
-     *   <li>{@link java.time.temporal.ChronoField#YEAR}</li>
-     *   <li>{@link java.time.temporal.ChronoField#MONTH_OF_YEAR}</li>
-     *   <li>{@link java.time.temporal.ChronoField#DAY_OF_MONTH}</li>
-     *   <li>{@link java.time.temporal.ChronoField#NANO_OF_DAY}</li>
+     * <li>{@link java.time.temporal.ChronoField#YEAR}</li>
+     * <li>{@link java.time.temporal.ChronoField#MONTH_OF_YEAR}</li>
+     * <li>{@link java.time.temporal.ChronoField#DAY_OF_MONTH}</li>
+     * <li>{@link java.time.temporal.ChronoField#NANO_OF_DAY}</li>
      * </ul>
      * <p>
      * Both {@link java.time.LocalDateTime} and {@link java.time.ZonedDateTime}
@@ -140,12 +147,12 @@ public class JulianDayHelper {
         final int m0 = temporal.get(MONTH_OF_YEAR);
         final int d0 = temporal.get(DAY_OF_MONTH);
         final boolean isJulian = isJulian(y0, m0, d0);
-        final BigDecimal y = (m0 > 2)? new BigDecimal(y0) : new BigDecimal(y0 -1);
-        final BigDecimal m = (m0 > 2)? new BigDecimal(m0) : new BigDecimal(m0 + 12);
+        final BigDecimal y = (m0 > 2) ? new BigDecimal(y0) : new BigDecimal(y0 - 1);
+        final BigDecimal m = (m0 > 2) ? new BigDecimal(m0) : new BigDecimal(m0 + 12);
         final BigDecimal dt = DecimalTime.asBigDecimal(temporal);
         final BigDecimal d = dt.add(new BigDecimal(d0));
         final BigDecimal a = y.divideToIntegralValue(C100, MC);
-        final BigDecimal b = isJulian? BigDecimal.ZERO : C2.subtract(a).add(a.divideToIntegralValue(C4, MC));
+        final BigDecimal b = isJulian ? BigDecimal.ZERO : C2.subtract(a).add(a.divideToIntegralValue(C4, MC));
         return C365_25.multiply(y.add(C4716)).setScale(0, RoundingMode.DOWN)
                 .add(C30_6001.multiply(m.add(C1)).setScale(0, RoundingMode.DOWN))
                 .add(d).add(b).subtract(C1524_5);
@@ -157,10 +164,10 @@ public class JulianDayHelper {
      * <p>
      * The temporal accessor must support the following fields:
      * <ul>
-     *   <li>{@link java.time.temporal.ChronoField#YEAR}</li>
-     *   <li>{@link java.time.temporal.ChronoField#MONTH_OF_YEAR}</li>
-     *   <li>{@link java.time.temporal.ChronoField#DAY_OF_MONTH}</li>
-     *   <li>{@link java.time.temporal.ChronoField#NANO_OF_DAY}</li>
+     * <li>{@link java.time.temporal.ChronoField#YEAR}</li>
+     * <li>{@link java.time.temporal.ChronoField#MONTH_OF_YEAR}</li>
+     * <li>{@link java.time.temporal.ChronoField#DAY_OF_MONTH}</li>
+     * <li>{@link java.time.temporal.ChronoField#NANO_OF_DAY}</li>
      * </ul>
      * <p>
      * Both {@link java.time.LocalDateTime} and {@link java.time.ZonedDateTime}
@@ -175,12 +182,12 @@ public class JulianDayHelper {
         final int m0 = temporal.get(MONTH_OF_YEAR);
         final int d0 = temporal.get(DAY_OF_MONTH);
         final boolean isJulian = isJulian(y0, m0, d0);
-        final double y = (m0 > 2)? (double) y0 : (double) (y0 -1);
-        final double m = (m0 > 2)? (double) m0 : (double) (m0 + 12);
+        final double y = (m0 > 2) ? (double) y0 : (double) (y0 - 1);
+        final double m = (m0 > 2) ? (double) m0 : (double) (m0 + 12);
         final double dt = DecimalTime.asDouble(temporal);
         final double d = dt + d0;
         final double a = Math.floor(y / 100);
-        final double b = isJulian? 0.0d : 2.0d - a + Math.floor(a / 4);
+        final double b = isJulian ? 0.0d : 2.0d - a + Math.floor(a / 4);
         return Math.floor(365.25d * (y + 4716.0d))
                 + Math.floor(30.6001d * (m + 1))
                 + d + b - 1524.5d;
@@ -192,15 +199,15 @@ public class JulianDayHelper {
      * The output will be fed to {@link DecimalTime#parseDateTime()} for
      * processing, so it will be in the format <code>1957-10-04.81</code>.
      * 
-     * @param e E parameter
-     * @param c C parameter
+     * @param e       E parameter
+     * @param c       C parameter
      * @param dayTime decimal day-time
      * 
      * @return a string representing the date-time
      */
     private static String computeDecimalDateTime(int e, int c, double day) {
-        final int month = e < 14? e - 1 : e - 13;
-        final int year = month > 2? c - 4716 : c - 4715;
+        final int month = e < 14 ? e - 1 : e - 13;
+        final int year = month > 2 ? c - 4716 : c - 4715;
         return FMT_DEC_DATETIME.formatted(year, month, day);
     }
 
@@ -220,8 +227,7 @@ public class JulianDayHelper {
     public static LocalDateTime getLocalDateTimeFrom(double jd) {
         if (jd < 0) {
             throw new DateTimeException(
-                "Cannot convert a negative julian date: " + jd
-            );
+                    "Cannot convert a negative julian date: " + jd);
         }
         final double jdc = jd + 0.5d;
         final double z = Math.floor(jdc);
@@ -258,8 +264,7 @@ public class JulianDayHelper {
     public static LocalDateTime getLocalDateTimeFrom(BigDecimal jd) {
         if (jd.signum() < 0) {
             throw new DateTimeException(
-                "Cannot convert a negative julian date: " + jd
-            );
+                    "Cannot convert a negative julian date: " + jd);
         }
         final BigDecimal jdc = jd.add(C0_5);
         final BigDecimal z = jdc.setScale(0, RoundingMode.DOWN);

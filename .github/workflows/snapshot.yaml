@@ -1,9 +1,9 @@
 # Workflow for basic library builds.
 name: Snapshot
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - main
 jobs:
     # Build workflow.
     build:
@@ -19,13 +19,13 @@ jobs:
             - name: Build and publish to GitHub Packages
               run: mvn deploy --settings .github/settings.xml -B --file pom.xml
               env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                GITHUB_ACTOR: ${{ github.actor }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_ACTOR: ${{ github.actor }}
     # Documentation workflow.
     doc:
         runs-on: ubuntu-latest
         permissions:
-          contents: write
+            contents: write
         steps:
             - name: Check out sources
               uses: actions/checkout@v6
@@ -39,5 +39,5 @@ jobs:
             - name: GitHub Pages action
               uses: peaceiris/actions-gh-pages@v4.0.0
               with:
-                github_token: ${{ secrets.GITHUB_TOKEN }}
-                publish_dir: ./target/staging
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_dir: ./target/staging

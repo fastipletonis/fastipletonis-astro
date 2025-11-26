@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,89 +38,89 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.FieldSource;
 
 /// Test suite for JulianDayHelper.
-public class JulianDayHelperTest {
+public class JulianDayTest {
     static final Collection<Arguments> isSupportedArgs = Arrays.asList(
-        arguments(true, LocalDateTime.now()),
-        arguments(true, ZonedDateTime.now()),
-        arguments(false, LocalDate.now()),
-        arguments(false, LocalTime.now()),
-        arguments(false, Instant.now())
-    );
+            arguments(true, LocalDateTime.now()),
+            arguments(true, ZonedDateTime.now()),
+            arguments(false, LocalDate.now()),
+            arguments(false, LocalTime.now()),
+            arguments(false, Instant.now()));
 
     /// Constructor.
-    JulianDayHelperTest() {}
+    JulianDayTest() {
+    }
 
     @ParameterizedTest
-    @CsvSource(useHeadersInDisplayName = true, textBlock ="""
-        EXPECTED,       INPUT
-        2436116.31,     1957-10-04.81 
-        1842713.0,      0333-01-27.5
-        2451545.0,      2000-01-01.5
-        2451179.5,      1999-01-01.0
-        2446822.5,      1987-01-27.0
-        2305812.5,      1600-12-31.0
-        2026871.8,       837-04-10.3
-        1676496.5,      -123-12-31.0
-              0.0,     -4712-01-01.5   
-    """)
+    @CsvSource(useHeadersInDisplayName = true, textBlock = """
+                EXPECTED,       INPUT
+                2436116.31,     1957-10-04.81
+                1842713.0,      0333-01-27.5
+                2451545.0,      2000-01-01.5
+                2451179.5,      1999-01-01.0
+                2446822.5,      1987-01-27.0
+                2305812.5,      1600-12-31.0
+                2026871.8,       837-04-10.3
+                1676496.5,      -123-12-31.0
+                      0.0,     -4712-01-01.5
+            """)
     void testGetBigDecimalFrom(String e, String dateTime) {
         final BigDecimal expected = new BigDecimal(e);
         final int expScale = expected.scale();
         final LocalDateTime input = DecimalTime.parseDateTime(dateTime);
-        final BigDecimal actual = JulianDayHelper.getBigDecimalFrom(input);
-        assertEquals(expected, actual.setScale(expScale));
+        final BigDecimal actual = JulianDay.getBigDecimalFrom(input);
+        assertEquals(expected, actual.setScale(expScale, RoundingMode.HALF_UP));
     }
 
     @ParameterizedTest
-    @CsvSource(useHeadersInDisplayName = true, textBlock ="""
-        EXPECTED,       INPUT
-        2436116.31,     1957-10-04.81 
-        1842713.0,      0333-01-27.5
-        2451545.0,      2000-01-01.5
-        2451179.5,      1999-01-01.0
-        2446822.5,      1987-01-27.0
-        2305812.5,      1600-12-31.0
-        2026871.8,       837-04-10.3
-        1676496.5,      -123-12-31.0
-              0.0,     -4712-01-01.5   
-    """)
+    @CsvSource(useHeadersInDisplayName = true, textBlock = """
+                EXPECTED,       INPUT
+                2436116.31,     1957-10-04.81
+                1842713.0,      0333-01-27.5
+                2451545.0,      2000-01-01.5
+                2451179.5,      1999-01-01.0
+                2446822.5,      1987-01-27.0
+                2305812.5,      1600-12-31.0
+                2026871.8,       837-04-10.3
+                1676496.5,      -123-12-31.0
+                      0.0,     -4712-01-01.5
+            """)
     void testGetDoubleFrom(double expected, String dateTime) {
         final LocalDateTime input = DecimalTime.parseDateTime(dateTime);
-        final double actual = JulianDayHelper.getDoubleFrom(input);
+        final double actual = JulianDay.getDoubleFrom(input);
         assertEquals(expected, actual);
     }
 
     @ParameterizedTest
-    @CsvSource(useHeadersInDisplayName = true, textBlock ="""
-        EXPECTED,               INPUT
-         1957-10-04T19:26:24,   2436116.31
-         0333-01-27T12:00:00,   1842713.0
-        -0123-12-31T00:00:00,   1676496.5
-    """)
+    @CsvSource(useHeadersInDisplayName = true, textBlock = """
+                EXPECTED,               INPUT
+                 1957-10-04T19:26:24,   2436116.31
+                 0333-01-27T12:00:00,   1842713.0
+                -0123-12-31T00:00:00,   1676496.5
+            """)
     void testGetLocalDateTimeFrom_double(String e, double input) {
         final LocalDateTime expected = LocalDateTime.parse(e);
-        final LocalDateTime actual = JulianDayHelper.getLocalDateTimeFrom(input);
+        final LocalDateTime actual = JulianDay.getLocalDateTimeFrom(input);
         assertEquals(expected, actual);
     }
 
     @ParameterizedTest
-    @CsvSource(useHeadersInDisplayName = true, textBlock ="""
-        EXPECTED,               INPUT
-         1957-10-04T19:26:24,   2436116.31
-         0333-01-27T12:00:00,   1842713.0
-        -0123-12-31T00:00:00,   1676496.5
-    """)
+    @CsvSource(useHeadersInDisplayName = true, textBlock = """
+                EXPECTED,               INPUT
+                 1957-10-04T19:26:24,   2436116.31
+                 0333-01-27T12:00:00,   1842713.0
+                -0123-12-31T00:00:00,   1676496.5
+            """)
     void testGetLocalDateTimeFrom_BigDecimal(String e, String i) {
         final LocalDateTime expected = LocalDateTime.parse(e);
         final BigDecimal input = new BigDecimal(i);
-        final LocalDateTime actual = JulianDayHelper.getLocalDateTimeFrom(input);
+        final LocalDateTime actual = JulianDay.getLocalDateTimeFrom(input);
         assertEquals(expected, actual);
     }
 
     @ParameterizedTest
     @FieldSource("isSupportedArgs")
     void testIsSupported(boolean expected, TemporalAccessor input) {
-        final boolean actual = JulianDayHelper.isSupported(input);
+        final boolean actual = JulianDay.isSupported(input);
         assertEquals(expected, actual);
     }
 }

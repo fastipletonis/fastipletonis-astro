@@ -4,9 +4,9 @@
  */
 :root {
     /* body, block and code fonts */
-    --body-font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    --body-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     --block-font-family: 'DejaVu Serif', "Georgia", "Times New Roman", Times, serif;
-    --code-font-family: "Monaco","Menlo","Consolas","Courier New",monospace;
+    --code-font-family: "Monaco", "Menlo", "Consolas", "Courier New", monospace;
     /* Base font sizes for body and code elements */
     --body-font-size: 14px;
     --block-font-size: 14.4px;

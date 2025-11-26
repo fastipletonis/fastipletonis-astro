@@ -7,14 +7,14 @@ when manipulating time from an astronomical perspective.
 
 The library allows to retrieve the Julian day from a supported temporal
 accessor, such as `ZonedDateTime` or `LocalDateTime` either by using the
-methods of the `JulianDayHelper` class directly:
+methods of the `JulianDay` class directly:
 
 ```java
   ZonedDateTime sputnikLaunch = ZonedDateTime.parse("1957-10-04T19:26:24Z");
 
-  // Alternatively, we can use JulianDayHelper.getBigDecimalFrom for
+  // Alternatively, we can use JulianDay.getBigDecimalFrom for
   // a higher precision.
-  double jd = JulianDayHelper.getDoubleFrom(sputnikLaunch); // 2436116.31
+  double jd = JulianDay.getDoubleFrom(sputnikLaunch); // 2436116.31
 ```
 
 or using the queries defined in the `Queries`class:

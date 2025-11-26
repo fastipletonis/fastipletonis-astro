@@ -48,9 +48,12 @@ public class DecimalTime {
     private static final BigDecimal NANOS_PER_DAY_BD = BigDecimal.valueOf(NANOS_PER_DAY_L);
     private static final double NANOS_PER_DAY_D = NANOS_PER_DAY_BD.doubleValue();
     // Regular expression for checking input
-    private static final Pattern FMT_DECIMAL_DATETIME = Pattern.compile("([+\\-]?[0-9]{1,4})-([01]?[0-9])-([0-3]?[0-9])[.,]([0-9]+)");
+    private static final Pattern FMT_DECIMAL_DATETIME = Pattern
+            .compile("([+\\-]?[0-9]{1,4})-([01]?[0-9])-([0-3]?[0-9])[.,]([0-9]+)");
+
     // Private constructor to prevent instantiation.
-    private DecimalTime() {}
+    private DecimalTime() {
+    }
 
     /**
      * Returns a decimal time from a temporal accessor object as a double
@@ -131,8 +134,7 @@ public class DecimalTime {
         final Matcher m = FMT_DECIMAL_DATETIME.matcher(text);
         if (!m.find()) {
             throw new DateTimeParseException(
-                "Cannot parse text: " + text, text, 0
-            );
+                    "Cannot parse text: " + text, text, 0);
         }
         try {
             final int year = Integer.parseInt(m.group(1));
@@ -144,8 +146,7 @@ public class DecimalTime {
             return LocalDateTime.of(localDate, localTime);
         } catch (NumberFormatException ex) {
             throw new DateTimeParseException(
-                "Cannot parse text: " + text, text, 0, ex
-            );     
+                    "Cannot parse text: " + text, text, 0, ex);
         }
     }
 
