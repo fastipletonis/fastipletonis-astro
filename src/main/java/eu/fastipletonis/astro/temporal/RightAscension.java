@@ -23,9 +23,6 @@ import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
 import static java.time.temporal.ChronoField.NANO_OF_SECOND;
 import static java.time.temporal.ChronoField.SECOND_OF_MINUTE;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAccessor;
 
@@ -33,16 +30,8 @@ import java.time.temporal.TemporalAccessor;
  * Routines for converting right ascension from time to angles and vice-versa.
  */
 public class RightAscension {
-    // Math context
-    private static final MathContext MC = new MathContext(20, RoundingMode.HALF_UP);
     // Conversion factor between decimal hours and nanoseconds
     private static final double D_HOUR_CONV = 24.0e10d;
-    // BigDecimal numeric constants.
-    private static final BigDecimal NANO = BigDecimal.valueOf(1.0e-9d);
-    private static final BigDecimal C60 = BigDecimal.valueOf(60);
-    private static final BigDecimal C3600 = BigDecimal.valueOf(3600);
-    private static final BigDecimal C15 = BigDecimal.valueOf(15);
-    private static final BigDecimal BD_HOUR_CONV = BigDecimal.valueOf(24, -10);
 
     // Private constructor.
     private RightAscension() {
@@ -102,7 +91,7 @@ public class RightAscension {
      * 
      * @return the angle expressed as a double in degrees
      */
-    public static double getAngleAsDouble(TemporalAccessor temporal) {
+    public static double from(TemporalAccessor temporal) {
         final double hh = (double) temporal.get(HOUR_OF_DAY);
         final double mm = (double) temporal.get(MINUTE_OF_HOUR);
         final double nanos = (double) (getNanos(temporal) * 1.0e-9d);
@@ -112,43 +101,14 @@ public class RightAscension {
     }
 
     /**
-     * Converts a right ascension time to an angle expressed in degrees.
-     * 
-     * @param temporal temporal accessor to get the angle from
-     * 
-     * @return the angle expressed as a BigDecimal in degrees
-     */
-    public static BigDecimal getAngleAsBigDecimal(TemporalAccessor temporal) {
-        final BigDecimal hh = BigDecimal.valueOf(temporal.get(HOUR_OF_DAY));
-        final BigDecimal mm = BigDecimal.valueOf(temporal.get(MINUTE_OF_HOUR));
-        final BigDecimal nanos = BigDecimal.valueOf(getNanos(temporal)).multiply(NANO);
-        final BigDecimal ss = BigDecimal.valueOf(temporal.get(SECOND_OF_MINUTE)).add(nanos);
-        final BigDecimal hours = hh.add(mm.divide(C60, MC)).add(ss.divide(C3600, MC));
-        return hours.multiply(C15);
-    }
-
-    /**
      * Converts a right ascension expressed in degrees to a time.
      * 
      * @param angle the angle expressed in degrees
      * 
      * @return a local time representing the right ascension
      */
-    public static LocalTime getLocalTimeFromAngle(double angle) {
+    public static LocalTime toLocalTime(double angle) {
         final long nanos = (long) (angle * D_HOUR_CONV);
         return LocalTime.ofNanoOfDay(nanos);
     }
-
-    /**
-     * Converts a right ascension expressed in degrees to a time.
-     * 
-     * @param angle the angle expressed in degrees
-     * 
-     * @return a local time representing the right ascension
-     */
-    public static LocalTime getLocalTimeFromAngle(BigDecimal angle) {
-        final long nanos = angle.multiply(BD_HOUR_CONV).longValue();
-        return LocalTime.ofNanoOfDay(nanos);
-    }
-
 }

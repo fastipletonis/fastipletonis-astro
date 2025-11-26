@@ -20,7 +20,6 @@ package eu.fastipletonis.astro.temporal;
 
 import static java.time.temporal.ChronoField.NANO_OF_DAY;
 
-import java.math.BigDecimal;
 import java.time.temporal.TemporalQuery;
 
 /**
@@ -41,23 +40,7 @@ public class Queries {
      */
     public static final TemporalQuery<Double> JULIAN_DAY = (temporal) -> {
         if (JulianDay.isSupported(temporal)) {
-            return JulianDay.getDoubleFrom(temporal);
-        } else
-            return null;
-    };
-
-    /**
-     * Query for returning the Astronomical Julian Day as a high-precision
-     * BigDecimal. Returns null if the temporal object does not support Julian
-     * Days.
-     * <p>
-     * More information about the fields that must be supportd by the
-     * TemporalAccessor is available in the documenttion for
-     * {@link JulianDay#isSupported(java.time.temporal.TemporalAccessor)}.
-     */
-    public static final TemporalQuery<BigDecimal> HP_JULIAN_DAY = (temporal) -> {
-        if (JulianDay.isSupported(temporal)) {
-            return JulianDay.getBigDecimalFrom(temporal);
+            return JulianDay.from(temporal);
         } else
             return null;
     };
@@ -69,19 +52,7 @@ public class Queries {
      */
     public static final TemporalQuery<Double> DECIMAL_TIME = (temporal) -> {
         if (temporal.isSupported(NANO_OF_DAY)) {
-            return DecimalTime.asDouble(temporal);
-        } else
-            return null;
-    };
-
-    /**
-     * Query for returning the decimal time as a BigDecimal. It returns
-     * <code>null</code> if the temporal object does not support the field
-     * {@link java.time.temporal.ChronoField#NANO_OF_DAY}.
-     */
-    public static final TemporalQuery<BigDecimal> HP_DECIMAL_TIME = (temporal) -> {
-        if (temporal.isSupported(NANO_OF_DAY)) {
-            return DecimalTime.asBigDecimal(temporal);
+            return DecimalTime.from(temporal);
         } else
             return null;
     };
@@ -93,19 +64,7 @@ public class Queries {
      */
     public static final TemporalQuery<Double> RIGHT_ASCENSION = (temporal) -> {
         if (RightAscension.isSupported(temporal)) {
-            return RightAscension.getAngleAsDouble(temporal);
-        } else
-            return null;
-    };
-
-    /**
-     * Query for returning the right ascension in degrees from a temporal
-     * object. It returns <code>null</code> if the temporal object does not
-     * support the required fields.
-     */
-    public static final TemporalQuery<BigDecimal> HP_RIGHT_ASCENSION = (temporal) -> {
-        if (RightAscension.isSupported(temporal)) {
-            return RightAscension.getAngleAsBigDecimal(temporal);
+            return RightAscension.from(temporal);
         } else
             return null;
     };

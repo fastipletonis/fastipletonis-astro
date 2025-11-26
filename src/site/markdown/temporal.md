@@ -12,9 +12,7 @@ methods of the `JulianDay` class directly:
 ```java
   ZonedDateTime sputnikLaunch = ZonedDateTime.parse("1957-10-04T19:26:24Z");
 
-  // Alternatively, we can use JulianDay.getBigDecimalFrom for
-  // a higher precision.
-  double jd = JulianDay.getDoubleFrom(sputnikLaunch); // 2436116.31
+  double jd = JulianDay.from(sputnikLaunch); // 2436116.31
 ```
 
 or using the queries defined in the `Queries`class:
@@ -22,8 +20,6 @@ or using the queries defined in the `Queries`class:
 ```java
   ZonedDateTime sputnikLaunch = ZonedDateTime.parse("1957-10-04T19:26:24Z");
 
-  // Alternatively, we can use Queries.HP_JULIAN_DAY for a higher precision.
-  // In this case a BigDecimal will be returned.
   // Please note that we use "Double", not "double", as the query will first
   // check if the temporal accessor can be used to retrieve a Julian day and
   // return null if it is not possible.
@@ -42,7 +38,7 @@ convert them in the JDK `LocalDateTime` object:
   String sputnikLaunch = "1957-10-04.81";
 
   // Check the API reference for details on the accepted format.
-  LocalDateTime dt = DecimalTime.parseDateTime(sputnikLaunch); // 1957-10-04T19:26:24
+  LocalDateTime dt = DecimalTime.parse(sputnikLaunch); // 1957-10-04T19:26:24
 ```
 
 Please note that a decimal time of `0` indicates midnight, not noon.
@@ -53,7 +49,6 @@ accessed through queries:
 ```java
   LocalTime sputnikLaunch = LocalTime.parse("19:26:24");
 
-  // Queries.HP_DECIMAL_TIME can be used for retrieving a BigDecimal.
   // Please note that we use "Double", not "double", as the query will first
   // check if the temporal accessor can be used to retrieve a decimal time and
   // return null if it is not possible.

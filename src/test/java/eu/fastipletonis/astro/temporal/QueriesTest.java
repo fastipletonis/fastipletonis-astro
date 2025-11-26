@@ -23,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -40,8 +38,8 @@ import org.junit.jupiter.params.provider.FieldSource;
 
 /// Test suite for Queries.
 public class QueriesTest {
-    /// Test arguments for queries that return results as `Double`.
-    static final Collection<Arguments> queriesArgs_double = Arrays.asList(
+    /// Test arguments for queries.
+    static final Collection<Arguments> queriesArgs = Arrays.asList(
             arguments(
                     Named.of("Queries.JULIAN_DAY", Queries.JULIAN_DAY),
                     Double.valueOf(2436116.31d),
@@ -66,59 +64,20 @@ public class QueriesTest {
                     Named.of("Queries.RIGHT_ASCENSION", Queries.RIGHT_ASCENSION),
                     null,
                     LocalDate.of(1957, 10, 4)));
-    /// Test arguments for queries that return results as `BigDecimal`.
-    static final Collection<Arguments> queriesArgs_BigDecimal = Arrays.asList(
-            arguments(
-                    Named.of("Queries.HP_JULIAN_DAY", Queries.HP_JULIAN_DAY),
-                    new BigDecimal("2436116.31"),
-                    LocalDateTime.of(1957, 10, 4, 19, 26, 24)),
-            arguments(
-                    Named.of("Queries.HP_JULIAN_DAY", Queries.HP_JULIAN_DAY),
-                    null,
-                    LocalTime.of(19, 26, 24)),
-            arguments(
-                    Named.of("Queries.HP_DECIMAL_TIME", Queries.HP_DECIMAL_TIME),
-                    new BigDecimal("0.81"),
-                    LocalTime.of(19, 26, 24)),
-            arguments(
-                    Named.of("Queries.HP_DECIMAL_TIME", Queries.HP_DECIMAL_TIME),
-                    null,
-                    LocalDate.of(1957, 10, 4)),
-            arguments(
-                    Named.of("Queries.HP_RIGHT_ASCENSION", Queries.HP_RIGHT_ASCENSION),
-                    BigDecimal.valueOf(138.7325d),
-                    LocalTime.of(9, 14, 55, 800_000_000)),
-            arguments(
-                    Named.of("Queries.HP_RIGHT_ASCENSION", Queries.HP_RIGHT_ASCENSION),
-                    null,
-                    LocalDate.of(1957, 10, 4)));
 
     /// Constructor.
     QueriesTest() {
     }
 
     @ParameterizedTest
-    @FieldSource("queriesArgs_double")
-    void testQueries_double(TemporalQuery<Double> query, Double expected, TemporalAccessor input) {
+    @FieldSource("queriesArgs")
+    void testQueries(TemporalQuery<Double> query, Double expected, TemporalAccessor input) {
         final Double actual = input.query(query);
         if (expected == null)
             assertNull(actual);
         else {
             assertNotNull(actual);
             assertEquals(expected, actual, 0.0001);
-        }
-    }
-
-    @ParameterizedTest
-    @FieldSource("queriesArgs_BigDecimal")
-    void testQueries_BigDecimal(TemporalQuery<BigDecimal> query, BigDecimal expected, TemporalAccessor input) {
-        final BigDecimal actual = input.query(query);
-        if (expected == null)
-            assertNull(actual);
-        else {
-            final int expScale = expected.scale();
-            assertNotNull(actual);
-            assertEquals(expected, actual.setScale(expScale, RoundingMode.HALF_UP));
         }
     }
 }

@@ -21,8 +21,6 @@ package eu.fastipletonis.astro.temporal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,39 +58,10 @@ public class RightAscensionTest {
                 138.7325,   09:14:55.8
                 180.0,      12:00:00
             """)
-    void testGetAngleAsBigDecimal(String angle, String time) {
-        final BigDecimal expected = new BigDecimal(angle);
-        final int expScale = expected.scale();
+    void testFrom(double expected, String time) {
         final LocalTime input = LocalTime.parse(time);
-        final BigDecimal actual = RightAscension.getAngleAsBigDecimal(input);
-        assertEquals(expected, actual.setScale(expScale, RoundingMode.HALF_UP));
-    }
-
-    @ParameterizedTest
-    @CsvSource(useHeadersInDisplayName = true, textBlock = """
-                EXPECTED,   INPUT
-                0.0,        00:00:00
-                138.7325,   09:14:55.8
-                180.0,      12:00:00
-            """)
-    void testGetAngleAsDouble(double expected, String time) {
-        final LocalTime input = LocalTime.parse(time);
-        final double actual = RightAscension.getAngleAsDouble(input);
+        final double actual = RightAscension.from(input);
         assertEquals(expected, actual, PRECISION);
-    }
-
-    @ParameterizedTest
-    @CsvSource(useHeadersInDisplayName = true, textBlock = """
-                EXPECTED,   INPUT
-                00:00:00,   0.0
-                09:14:55.8, 138.7325
-                12:00:00,   180.0
-            """)
-    void testGetLocalTimeFromAngle_BigDecimal(String time, String angle) {
-        final LocalTime expected = LocalTime.parse(time);
-        final BigDecimal input = new BigDecimal(angle);
-        final LocalTime actual = RightAscension.getLocalTimeFromAngle(input);
-        assertEquals(expected, actual);
     }
 
     @ParameterizedTest
@@ -102,9 +71,9 @@ public class RightAscensionTest {
                 09:14:55.800, 138.732500000001
                 12:00:00,     180.0
             """)
-    void testGetLocalTimeFromAngle_double(String time, double input) {
+    void testToLocalTime(String time, double input) {
         final LocalTime expected = LocalTime.parse(time);
-        final LocalTime actual = RightAscension.getLocalTimeFromAngle(input);
+        final LocalTime actual = RightAscension.toLocalTime(input);
         assertEquals(expected, actual);
     }
 
