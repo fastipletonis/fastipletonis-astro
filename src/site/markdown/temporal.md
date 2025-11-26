@@ -59,3 +59,16 @@ accessed through queries:
   // return null if it is not possible.
   double t = sputnikLaunch.query(Queries.DECIMAL_TIME); // 0.81
 ```
+
+## Right ascension
+
+Since right ascension is usually declined in "time", routines for converting to
+angles and vice-versa are provided. Queries are provided too to retrieve the
+angle from a temporal accessor. Please check out the class `RightAscension` for
+more details.
+
+```java
+
+LocalTime t = Localtime.parse("9:14:55.8");
+double degrees = t.query(Queries.RIGHT_ASCENSION);
+```
