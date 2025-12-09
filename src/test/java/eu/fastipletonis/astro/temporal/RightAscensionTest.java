@@ -40,7 +40,7 @@ public class RightAscensionTest {
     /// Precision for testing double
     private static final double PRECISION = 1.0e-5d;
     /// Test arguments
-    static final Collection<Arguments> isSupportedArgs = Arrays.asList(
+    protected static final Collection<Arguments> isSupportedArgs = Arrays.asList(
             arguments(true, LocalDateTime.now()),
             arguments(true, ZonedDateTime.now()),
             arguments(false, LocalDate.now()),
