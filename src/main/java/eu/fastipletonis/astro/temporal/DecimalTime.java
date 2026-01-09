@@ -20,9 +20,6 @@ package eu.fastipletonis.astro.temporal;
 
 import static java.time.temporal.ChronoField.NANO_OF_DAY;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -41,47 +38,31 @@ import java.util.regex.Pattern;
  * Please note that these routines ignore the timezone.
  */
 public class DecimalTime {
-    // Math context
-    private static final MathContext MC = new MathContext(20, RoundingMode.HALF_UP);
     // Constants for conversions and calculations.
     private static final long NANOS_PER_DAY_L = 86_400_000_000_000L;
-    private static final BigDecimal NANOS_PER_DAY_BD = BigDecimal.valueOf(NANOS_PER_DAY_L);
-    private static final double NANOS_PER_DAY_D = NANOS_PER_DAY_BD.doubleValue();
+    private static final double NANOS_PER_DAY_D = (double) NANOS_PER_DAY_L;
     // Regular expression for checking input
-    private static final Pattern FMT_DECIMAL_DATETIME = Pattern.compile("([+\\-]?[0-9]{1,4})-([01]?[0-9])-([0-3]?[0-9])[.,]([0-9]+)");
-    // Private constructor to prevent instantiation.
-    private DecimalTime() {}
+    private static final Pattern FMT_DECIMAL_DATETIME = Pattern
+            .compile("([+\\-]?[0-9]{1,4})-([01]?[0-9])-([0-3]?[0-9])[.,]([0-9]+)");
 
-    /**
-     * Returns a decimal time from a temporal accessor object as a double
-     * value.
-     * <p>
-     * The temporal accessor must support the field
-     * {@link java.time.temporal.ChronoField#NANO_OF_DAY}
-     * 
-     * @param temporal temporal accessor to use
-     * 
-     * @return a double value representing the decimal time.
-     */
-    public static double asDouble(TemporalAccessor temporal) {
-        final double nanos = (double) temporal.getLong(NANO_OF_DAY);
-        return nanos / NANOS_PER_DAY_D;
+    // Private constructor to prevent instantiation.
+    private DecimalTime() {
     }
 
     /**
-     * Returns a decimal time from a temporal accessor object as a BigDecimal
-     * value.
+     * Returns a decimal time from a temporal accessor object as a
+     * double-precision value.
      * <p>
      * The temporal accessor must support the field
      * {@link java.time.temporal.ChronoField#NANO_OF_DAY}
      * 
      * @param temporal temporal accessor to use
      * 
-     * @return a BigDecimal value representing the decimal time.
+     * @return a double-precision value representing the decimal time.
      */
-    public static BigDecimal asBigDecimal(TemporalAccessor temporal) {
-        final BigDecimal nanos = BigDecimal.valueOf(temporal.getLong(NANO_OF_DAY));
-        return nanos.divide(NANOS_PER_DAY_BD, MC);
+    public static double from(TemporalAccessor temporal) {
+        final double nanos = (double) temporal.getLong(NANO_OF_DAY);
+        return nanos / NANOS_PER_DAY_D;
     }
 
     /**
@@ -94,18 +75,6 @@ public class DecimalTime {
     public static LocalTime toLocalTime(double dt) {
         final double nanoOfDay = dt * NANOS_PER_DAY_D;
         return LocalTime.ofNanoOfDay((long) nanoOfDay);
-    }
-
-    /**
-     * Converts the given decimal time to a LocalTime object.
-     * 
-     * @param dt decimal time
-     * 
-     * @return the equivalent LocalTime.
-     */
-    public static LocalTime toLocalTime(BigDecimal dt) {
-        final BigDecimal nanoOfDay = dt.multiply(NANOS_PER_DAY_BD);
-        return LocalTime.ofNanoOfDay(nanoOfDay.longValue());
     }
 
     /**
@@ -127,12 +96,11 @@ public class DecimalTime {
      * 
      * @return a LocalDateTime object representing the given time
      */
-    public static LocalDateTime parseDateTime(CharSequence text) {
+    public static LocalDateTime parse(CharSequence text) {
         final Matcher m = FMT_DECIMAL_DATETIME.matcher(text);
         if (!m.find()) {
             throw new DateTimeParseException(
-                "Cannot parse text: " + text, text, 0
-            );
+                    "Cannot parse text: " + text, text, 0);
         }
         try {
             final int year = Integer.parseInt(m.group(1));
@@ -144,9 +112,7 @@ public class DecimalTime {
             return LocalDateTime.of(localDate, localTime);
         } catch (NumberFormatException ex) {
             throw new DateTimeParseException(
-                "Cannot parse text: " + text, text, 0, ex
-            );     
+                    "Cannot parse text: " + text, text, 0, ex);
         }
     }
-
 }

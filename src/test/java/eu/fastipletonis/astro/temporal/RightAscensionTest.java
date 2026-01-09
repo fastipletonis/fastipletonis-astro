@@ -1,5 +1,5 @@
 /*
- *   Test suite for DecimalTime.
+ *   Test suite for right ascension routines.
  *
  *   Copyright (C) 2025 Marco Confalonieri <marco at marcoconfalonieri.it>
  *
@@ -19,56 +19,68 @@
 package eu.fastipletonis.astro.temporal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalAccessor;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.FieldSource;
 
-/// Test suite for DecimalTime.
-public class DecimalTimeTest {
+/// Test suite for RightAscension class.
+public class RightAscensionTest {
+    /// Precision for testing double
+    private static final double PRECISION = 1.0e-5d;
+    /// Test arguments
+    protected static final Collection<Arguments> isSupportedArgs = Arrays.asList(
+            arguments(true, LocalDateTime.now()),
+            arguments(true, ZonedDateTime.now()),
+            arguments(false, LocalDate.now()),
+            arguments(true, LocalTime.now()),
+            arguments(false, Instant.now()));
 
-    /// Constructor.
-    DecimalTimeTest() {
+    /// Empty constructor.
+    RightAscensionTest() {
     }
 
     @ParameterizedTest
     @CsvSource(useHeadersInDisplayName = true, textBlock = """
                 EXPECTED,   INPUT
                 0.0,        00:00:00
-                0.5,        12:00:00
-                0.81,       19:26:24
+                138.7325,   09:14:55.8
+                180.0,      12:00:00
             """)
     void testFrom(double expected, String time) {
         final LocalTime input = LocalTime.parse(time);
-        final double actual = DecimalTime.from(input);
-        assertEquals(expected, actual, 0.0001);
+        final double actual = RightAscension.from(input);
+        assertEquals(expected, actual, PRECISION);
     }
 
     @ParameterizedTest
     @CsvSource(useHeadersInDisplayName = true, textBlock = """
-                EXPECTED,   INPUT
-                00:00:00,   0.0
-                12:00:00,   0.5
-                19:26:24,   0.81
+                EXPECTED,     INPUT
+                00:00:00,     0.0
+                09:14:55.800, 138.732500000001
+                12:00:00,     180.0
             """)
     void testToLocalTime(String time, double input) {
         final LocalTime expected = LocalTime.parse(time);
-        final LocalTime actual = DecimalTime.toLocalTime(input);
+        final LocalTime actual = RightAscension.toLocalTime(input);
         assertEquals(expected, actual);
     }
 
     @ParameterizedTest
-    @CsvSource(useHeadersInDisplayName = true, textBlock = """
-                EXPECTED,               INPUT
-                 1957-10-04T19:26:24,   1957-10-04.81
-                 0333-01-27T12:00:00,   333-1-27.5
-                -0123-12-31T00:00:00,   '-123-12-31,0'
-            """)
-    void testParse(String e, String input) {
-        final LocalDateTime expected = LocalDateTime.parse(e);
-        final LocalDateTime actual = DecimalTime.parse(input);
+    @FieldSource("isSupportedArgs")
+    void testIsSupported(boolean expected, TemporalAccessor input) {
+        final boolean actual = RightAscension.isSupported(input);
         assertEquals(expected, actual);
     }
 }
