@@ -37,7 +37,7 @@ jobs:
             - name: Update the website
               run: mvn clean site site:stage -B
             - name: GitHub Pages action
-              uses: peaceiris/actions-gh-pages@v4.0.0
+              uses: peaceiris/actions-gh-pages@v4.1.0
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
                 publish_dir: ./target/staging
